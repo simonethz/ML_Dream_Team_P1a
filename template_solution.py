@@ -69,8 +69,15 @@ def average_LR_RMSE(X, y, lambdas, n_folds):
     """
     RMSE_mat = np.zeros((n_folds, len(lambdas)))
 
-    # TODO: Enter your code here. Hint: Use functions 'fit' and 'calculate_RMSE' with training and test data
-    # and fill all entries in the matrix 'RMSE_mat'
+    for (i, l) in enumerate(lambdas):
+        for j in range(n_folds):
+            test_X = X[15*j : 15*(j+1)]
+            test_Y = y[15*j : 15*(j+1)]
+            train_X = np.concatenate((X[0:15*j], X[15*(j+1):]), axis=0)
+            train_Y = np.concatenate((y[0:15*j], y[15*(j+1):]), axis=0)
+
+            w = fit(train_X, train_Y, l)
+            RMSE_mat[j, i] = calculate_RMSE(w, test_X, test_Y)
 
     avg_RMSE = np.mean(RMSE_mat, axis=0)
     assert avg_RMSE.shape == (5,)
