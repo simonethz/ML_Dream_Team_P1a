@@ -4,6 +4,8 @@
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import KFold
+from sklearn.metrics import mean_squared_error
+
 
 # Add any additional imports here (however, the task is solvable without using 
 # any additional imports)
@@ -25,9 +27,7 @@ def fit(X, y, lam):
     ----------
     w: array of floats: dim = (13,), optimal parameters of ridge regression
     """
-
     weights = np.zeros((13,))
-    # TODO: Enter your code here
     m_id=np.eye(13)
     m1=X.T@X + lam*m_id
     m_inverse=np.linalg.inv(m1)
@@ -38,6 +38,10 @@ def fit(X, y, lam):
 
 
 def calculate_RMSE(w, X, y):
+
+
+
+
     """This function takes test data points (X and y), and computes the empirical RMSE of 
     predicting y from X using a linear model with weights w. 
 
@@ -51,8 +55,9 @@ def calculate_RMSE(w, X, y):
     ----------
     rmse: float: dim = 1, RMSE value
     """
+    y_pred_train = X @ w
     rmse = 0
-    # TODO: Enter your code here
+    rmse = mean_squared_error(y, y_pred_train)**0.5
     assert np.isscalar(rmse)
     return rmse
 
@@ -75,8 +80,15 @@ def average_LR_RMSE(X, y, lambdas, n_folds):
     """
     RMSE_mat = np.zeros((n_folds, len(lambdas)))
 
-    # TODO: Enter your code here. Hint: Use functions 'fit' and 'calculate_RMSE' with training and test data
-    # and fill all entries in the matrix 'RMSE_mat'
+    for (i, l) in enumerate(lambdas):
+        for j in range(n_folds):
+            test_X = X[15*j : 15*(j+1)]
+            test_Y = y[15*j : 15*(j+1)]
+            train_X = np.concatenate((X[0:15*j], X[15*(j+1):]), axis=0)
+            train_Y = np.concatenate((y[0:15*j], y[15*(j+1):]), axis=0)
+
+            w = fit(train_X, train_Y, l)
+            RMSE_mat[j, i] = calculate_RMSE(w, test_X, test_Y)
 
     avg_RMSE = np.mean(RMSE_mat, axis=0)
     assert avg_RMSE.shape == (5,)
