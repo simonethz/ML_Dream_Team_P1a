@@ -27,7 +27,6 @@ def fit(X, y, lam):
     """
 
     weights = np.zeros((13,))
-    # TODO: Enter your code here
     m_id=np.eye(13)
     m1=X.T@X + lam*m_id
     m_inverse=np.linalg.inv(m1)
