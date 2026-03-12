@@ -78,10 +78,11 @@ def average_LR_RMSE(X, y, lambdas, n_folds):
 
     for (i, l) in enumerate(lambdas):
         for j in range(n_folds):
-            test_X = X[15*j : 15*(j+1)]
-            test_Y = y[15*j : 15*(j+1)]
-            train_X = np.concatenate((X[0:15*j], X[15*(j+1):]), axis=0)
-            train_Y = np.concatenate((y[0:15*j], y[15*(j+1):]), axis=0)
+            test_X = X[15*j : 15*(j+1) - 1]
+            test_Y = y[15*j : 15*(j+1) - 1]
+
+            train_X = np.delete(X, slice(15*j, 15*(j+1) - 1), axis=0)
+            train_Y = np.delete(y, slice(15*j, 15*(j+1) - 1), axis=0)
 
             w = fit(train_X, train_Y, l)
             RMSE_mat[j, i] = calculate_RMSE(w, test_X, test_Y)
