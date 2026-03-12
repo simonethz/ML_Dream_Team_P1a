@@ -38,10 +38,6 @@ def fit(X, y, lam):
 
 
 def calculate_RMSE(w, X, y):
-
-
-
-
     """This function takes test data points (X and y), and computes the empirical RMSE of 
     predicting y from X using a linear model with weights w. 
 
